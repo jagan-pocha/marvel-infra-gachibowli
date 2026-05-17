@@ -104,10 +104,21 @@ function PriceCalculator() {
   )
 }
 
+const isMobile = () => window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent)
+
 export default function FloorPlans() {
-  const [selected, setSelected]     = useState('premium')
+  const [selected, setSelected]      = useState('premium')
   const [previewOpen, setPreviewOpen] = useState(false)
   const unit = units.find(u => u.id === selected)
+
+  const handlePreview = () => {
+    if (isMobile()) {
+      // Mobile: open in new tab so native PDF viewer handles zoom
+      window.open('/floorplans.pdf', '_blank')
+    } else {
+      setPreviewOpen(true)
+    }
+  }
 
   return (
     <main style={{ background: 'var(--bg-primary)' }}>
@@ -216,7 +227,7 @@ export default function FloorPlans() {
                   <div className="mt-5 flex items-center gap-3">
                     <motion.button
                       type="button"
-                      onClick={() => setPreviewOpen(true)}
+                      onClick={handlePreview}
                       whileHover={{ y: -1 }}
                       whileTap={{ scale: 0.97 }}
                       className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full transition-all duration-200"
@@ -358,12 +369,21 @@ export default function FloorPlans() {
                 <div className="flex items-center gap-2">
                   <a
                     href="/floorplans.pdf"
-                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all duration-150"
                     style={{ background: 'var(--accent-tint)', color: 'var(--accent)', border: '1px solid var(--border-gold)' }}
                   >
+                    <Eye size={12} />
+                    Open in Tab
+                  </a>
+                  <a
+                    href="/floorplans.pdf"
+                    download
+                    className="flex items-center gap-1.5 text-xs font-medium text-[var(--text-secondary)] hover:text-accent transition-colors px-2 py-1.5"
+                  >
                     <Download size={12} />
-                    Download PDF
+                    Download
                   </a>
                   <button
                     type="button"
