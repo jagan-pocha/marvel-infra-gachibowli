@@ -17,7 +17,7 @@ const units = [
     balconies: 2,
     price: 1817 * 10999,
     features: ['Master Bedroom with Walk-in Closet', 'Open Plan Living & Dining', 'Modular Kitchen', '2 Covered Balconies', 'Premium Tile Flooring'],
-    gradient: 'linear-gradient(135deg, rgba(29,237,84,0.15) 0%, rgba(201,150,10,0.05) 100%)',
+    gradient: 'linear-gradient(135deg, rgba(29,237,84,0.15) 0%, rgba(29,237,84,0.05) 100%)',
   },
   {
     id: 'premium',
@@ -104,21 +104,10 @@ function PriceCalculator() {
   )
 }
 
-const isMobile = () => window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent)
-
 export default function FloorPlans() {
-  const [selected, setSelected]      = useState('premium')
+  const [selected, setSelected]       = useState('premium')
   const [previewOpen, setPreviewOpen] = useState(false)
   const unit = units.find(u => u.id === selected)
-
-  const handlePreview = () => {
-    if (isMobile()) {
-      // Mobile: open in new tab so native PDF viewer handles zoom
-      window.open('/floorplans.pdf', '_blank')
-    } else {
-      setPreviewOpen(true)
-    }
-  }
 
   return (
     <main style={{ background: 'var(--bg-primary)' }}>
@@ -159,7 +148,7 @@ export default function FloorPlans() {
                 onClick={() => setSelected(u.id)}
                 whileTap={{ scale: 0.97 }}
                 className={`relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                  selected === u.id ? 'text-white' : 'text-[var(--text-secondary)] glass hover:text-[var(--text-primary)]'
+                  selected === u.id ? 'text-[#000e4b]' : 'text-[var(--text-secondary)] glass hover:text-[var(--text-primary)]'
                 }`}
                 style={selected === u.id ? { background: 'var(--gold-gradient)', boxShadow: 'var(--glow-gold)' } : {}}
               >
@@ -175,7 +164,7 @@ export default function FloorPlans() {
                 {u.tag && (
                   <span className={`relative z-10 ml-2 text-xs px-2 py-0.5 rounded-full ${
                     selected === u.id
-                      ? 'bg-white/20 text-white'
+                      ? 'bg-[#000e4b]/15 text-[#000e4b]'
                       : 'bg-[rgba(29,237,84,0.12)] text-accent'
                   }`}>
                     {u.tag}
@@ -205,15 +194,15 @@ export default function FloorPlans() {
                     boxShadow: 'var(--shadow-card)',
                   }}
                 >
-                  {/* Decorative floor plan lines */}
-                  <svg viewBox="0 0 320 200" className="w-full max-w-sm opacity-60" fill="none">
+                  {/* Indicative floor plan lines */}
+                  <svg viewBox="0 0 320 200" className="w-full max-w-sm opacity-70" fill="none">
                     <rect x="20" y="20" width="280" height="160" rx="4" stroke="currentColor" strokeWidth="1.5" className="text-accent" />
                     <rect x="20" y="20" width="100" height="90" rx="2" stroke="currentColor" strokeWidth="1" className="text-accent" strokeDasharray="4 2" />
                     <rect x="120" y="20" width="90" height="90" rx="2" stroke="currentColor" strokeWidth="1" className="text-accent" strokeDasharray="4 2" />
                     <rect x="210" y="20" width="90" height="90" rx="2" stroke="currentColor" strokeWidth="1" className="text-accent" strokeDasharray="4 2" />
                     <rect x="20" y="110" width="180" height="70" rx="2" stroke="currentColor" strokeWidth="1" className="text-accent" strokeDasharray="4 2" />
                     <rect x="200" y="110" width="100" height="70" rx="2" stroke="currentColor" strokeWidth="1" className="text-accent" strokeDasharray="4 2" />
-                    <text x="55" y="62" fontSize="9" fill="currentColor" className="text-accent" textAnchor="middle">Bedroom 1</text>
+                    <text x="70"  y="62" fontSize="9" fill="currentColor" className="text-accent" textAnchor="middle">Bedroom 1</text>
                     <text x="162" y="62" fontSize="9" fill="currentColor" className="text-accent" textAnchor="middle">Bedroom 2</text>
                     <text x="252" y="62" fontSize="9" fill="currentColor" className="text-accent" textAnchor="middle">Bedroom 3</text>
                     <text x="108" y="148" fontSize="9" fill="currentColor" className="text-accent" textAnchor="middle">Living &amp; Dining</text>
@@ -224,26 +213,25 @@ export default function FloorPlans() {
                   </div>
 
                   {/* Preview + Download */}
-                  <div className="mt-5 flex items-center gap-3">
+                  <div className="mt-5 flex items-center gap-4">
                     <motion.button
                       type="button"
-                      onClick={handlePreview}
+                      onClick={() => setPreviewOpen(true)}
                       whileHover={{ y: -1 }}
                       whileTap={{ scale: 0.97 }}
-                      className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full transition-all duration-200"
+                      className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full"
                       style={{ background: 'var(--gold-gradient)', color: '#000e4b', boxShadow: 'var(--glow-gold)' }}
                     >
                       <Eye size={14} />
-                      Preview PDF
+                      Preview
                     </motion.button>
-
                     <a
                       href="/floorplans.pdf"
-                      download
-                      className="flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)] hover:text-accent transition-colors duration-150"
+                      download="Marvel-Infra-Gachibowli-Floor-Plans.pdf"
+                      className="flex items-center gap-2 text-sm font-medium text-accent hover:text-accent-light transition-colors duration-150"
                     >
                       <Download size={14} />
-                      Download
+                      Download PDF
                     </a>
                   </div>
                 </div>
@@ -330,8 +318,7 @@ export default function FloorPlans() {
           </div>
         </div>
       </section>
-
-      {/* ── PDF Preview Modal ── */}
+      {/* PDF Preview Modal */}
       <AnimatePresence>
         {previewOpen && (
           <motion.div
@@ -344,8 +331,8 @@ export default function FloorPlans() {
           >
             <motion.div
               initial={{ scale: 0.96, opacity: 0 }}
-              animate={{ scale: 1,    opacity: 1 }}
-              exit={{   scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
               transition={{ type: 'spring', bounce: 0.18, duration: 0.35 }}
               className="relative w-full rounded-2xl overflow-hidden flex flex-col"
               style={{
@@ -355,47 +342,32 @@ export default function FloorPlans() {
               }}
               onClick={e => e.stopPropagation()}
             >
-              {/* Modal header */}
+              {/* Header */}
               <div className="flex items-center justify-between px-5 py-3 border-b flex-shrink-0"
                 style={{ borderColor: 'var(--border-subtle)' }}>
                 <div>
                   <h3 className="font-display font-semibold text-[var(--text-primary)] text-base">
                     Floor Plans — Marvel Infra Gachibowli
                   </h3>
-                  <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                    3 BHK · 1,817 – 3,675 Sq.Ft · ₹10,999/Sq.Ft
-                  </p>
+                  <p className="text-xs text-[var(--text-muted)] mt-0.5">3 BHK · 1,817 – 3,675 Sq.Ft</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <a
                     href="/floorplans.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all duration-150"
+                    download="Marvel-Infra-Gachibowli-Floor-Plans.pdf"
+                    className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full"
                     style={{ background: 'var(--accent-tint)', color: 'var(--accent)', border: '1px solid var(--border-gold)' }}
                   >
-                    <Eye size={12} />
-                    Open in Tab
+                    <Download size={12} /> Download
                   </a>
-                  <a
-                    href="/floorplans.pdf"
-                    download
-                    className="flex items-center gap-1.5 text-xs font-medium text-[var(--text-secondary)] hover:text-accent transition-colors px-2 py-1.5"
-                  >
-                    <Download size={12} />
-                    Download
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => setPreviewOpen(false)}
-                    className="w-8 h-8 flex items-center justify-center rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--glass-bg)] transition-colors"
-                  >
+                  <button type="button" onClick={() => setPreviewOpen(false)}
+                    className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--glass-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
                     <X size={17} />
                   </button>
                 </div>
               </div>
 
-              {/* PDF iframe — fills all remaining height */}
+              {/* iframe */}
               <div className="flex-1 min-h-0">
                 <iframe
                   src="/floorplans.pdf#toolbar=0&navpanes=0&scrollbar=1"
