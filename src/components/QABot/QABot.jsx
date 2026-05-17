@@ -366,7 +366,7 @@ export default function QABot() {
 
     if (option.action === 'download') {
       const link = document.createElement('a')
-      link.href = '/Marvel Infra Gachibowli Floor Plans.pdf'
+      link.href = '/floorplans.pdf'
       link.download = 'Marvel-Infra-Gachibowli-Floor-Plans.pdf'
       link.click()
       // Show confirmation message without changing node

@@ -227,7 +227,7 @@ export default function FloorPlans() {
                     </motion.button>
 
                     <a
-                      href="/Marvel Infra Gachibowli Floor Plans.pdf"
+                      href="/floorplans.pdf"
                       download
                       className="flex items-center gap-2 text-sm font-medium text-[var(--text-secondary)] hover:text-accent transition-colors duration-150"
                     >
@@ -357,7 +357,7 @@ export default function FloorPlans() {
                 </div>
                 <div className="flex items-center gap-2">
                   <a
-                    href="/Marvel Infra Gachibowli Floor Plans.pdf"
+                    href="/floorplans.pdf"
                     download
                     className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all duration-150"
                     style={{ background: 'var(--accent-tint)', color: 'var(--accent)', border: '1px solid var(--border-gold)' }}
@@ -378,7 +378,7 @@ export default function FloorPlans() {
               {/* PDF iframe — fills all remaining height */}
               <div className="flex-1 min-h-0">
                 <iframe
-                  src="/Marvel Infra Gachibowli Floor Plans.pdf#toolbar=0&navpanes=0&scrollbar=1"
+                  src="/floorplans.pdf#toolbar=0&navpanes=0&scrollbar=1"
                   className="w-full h-full border-0 block"
                   title="Marvel Infra Gachibowli Floor Plans"
                 />
