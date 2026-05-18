@@ -72,13 +72,21 @@ const amenityPreviews = [
 const START_SEC = 45
 const END_SEC   = 120
 
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    || window.innerWidth < 768
+}
+
 export default function Home() {
   const heroRef    = useRef(null)
   const ytDivRef   = useRef(null)
   const playerRef  = useRef(null)
-  const [videoReady, setVideoReady] = useState(false)
+  const isMobile   = useRef(isMobileDevice())
+  const [videoReady, setVideoReady] = useState(isMobile.current) // mobile: skip cover immediately
 
   useEffect(() => {
+    if (isMobile.current) return // skip YouTube on mobile — use animated orb background
+
     let checkInterval = null
 
     function onReady(e) {
@@ -152,15 +160,34 @@ export default function Home() {
         className="relative w-full min-h-screen flex items-center justify-center overflow-hidden"
         style={{ background: '#020814' }}
       >
-        {/* ── Animated orb background ── */}
-        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+        {/* Mobile image background */}
+        {isMobile.current && (
+          <div className="absolute inset-0" style={{ zIndex: 0 }}>
+            <img
+              src="/images/High-Rise-Gated-Community-Project.jpg"
+              alt=""
+              style={{
+                width: '100%', height: '100%',
+                objectFit: 'cover', objectPosition: 'center',
+                display: 'block',
+              }}
+            />
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(to bottom, rgba(2,8,20,0.55) 0%, rgba(2,8,20,0.35) 45%, rgba(2,8,20,0.75) 100%)',
+            }} />
+          </div>
+        )}
+
+        {/* ── Animated orb background (desktop always, mobile as subtle overlay) ── */}
+        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: isMobile.current ? 1 : 0 }}>
 
           {/* Orb 1 — sky blue, top-left */}
           <div style={{
             position: 'absolute', top: '-10%', left: '-8%',
             width: '650px', height: '650px', borderRadius: '50%',
             background: 'radial-gradient(circle, #00b7fb 0%, transparent 70%)',
-            opacity: 0.28, filter: 'blur(72px)',
+            opacity: isMobile.current ? 0.12 : 0.28, filter: 'blur(72px)',
             animation: 'orb1 12s ease-in-out infinite',
           }} />
 
@@ -169,7 +196,7 @@ export default function Home() {
             position: 'absolute', top: '5%', right: '-10%',
             width: '580px', height: '580px', borderRadius: '50%',
             background: 'radial-gradient(circle, #1ded54 0%, transparent 70%)',
-            opacity: 0.22, filter: 'blur(80px)',
+            opacity: isMobile.current ? 0.10 : 0.22, filter: 'blur(80px)',
             animation: 'orb2 15s ease-in-out infinite',
           }} />
 
@@ -178,7 +205,7 @@ export default function Home() {
             position: 'absolute', top: '35%', left: '35%',
             width: '500px', height: '500px', borderRadius: '50%',
             background: 'radial-gradient(circle, #00d4cc 0%, transparent 70%)',
-            opacity: 0.14, filter: 'blur(90px)',
+            opacity: isMobile.current ? 0.06 : 0.14, filter: 'blur(90px)',
             animation: 'orb3 18s ease-in-out infinite',
           }} />
 
@@ -187,7 +214,7 @@ export default function Home() {
             position: 'absolute', bottom: '-5%', left: '20%',
             width: '480px', height: '480px', borderRadius: '50%',
             background: 'radial-gradient(circle, #0066ff 0%, transparent 70%)',
-            opacity: 0.18, filter: 'blur(80px)',
+            opacity: isMobile.current ? 0.08 : 0.18, filter: 'blur(80px)',
             animation: 'orb4 20s ease-in-out infinite',
           }} />
 
@@ -211,17 +238,19 @@ export default function Home() {
           }} />
         </div>
 
-        {/* YouTube player — 0:45 → 2:00 loop */}
-        <div className="absolute inset-0" style={{ zIndex: 1, overflow: 'hidden' }}>
-          {/* YT API replaces this div with an iframe */}
-          <div ref={ytDivRef} style={{
-            position: 'absolute', top: '50%', left: '50%',
-            width: '100vw', height: '56.25vw',
-            minHeight: '100%', minWidth: '177.78vh',
-            transform: 'translate(-50%, -50%) scale(1.05)',
-            pointerEvents: 'none',
-          }} />
-        </div>
+        {/* YouTube player — 0:45 → 2:00 loop (desktop only) */}
+        {!isMobile.current && (
+          <div className="absolute inset-0" style={{ zIndex: 1, overflow: 'hidden' }}>
+            {/* YT API replaces this div with an iframe */}
+            <div ref={ytDivRef} style={{
+              position: 'absolute', top: '50%', left: '50%',
+              width: '100vw', height: '56.25vw',
+              minHeight: '100%', minWidth: '177.78vh',
+              transform: 'translate(-50%, -50%) scale(1.05)',
+              pointerEvents: 'none',
+            }} />
+          </div>
+        )}
 
         {/* Loading cover — hides YouTube's initial play button until video starts */}
         <div style={{

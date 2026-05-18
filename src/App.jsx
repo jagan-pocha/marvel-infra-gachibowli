@@ -5,6 +5,8 @@ import { ThemeProvider } from './context/ThemeContext'
 import Navbar from './components/Navbar/Navbar'
 import Footer from './components/Footer/Footer'
 import QABot from './components/QABot/QABot'
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'
+import NotFound from './pages/NotFound/NotFound'
 
 const Home       = lazy(() => import('./pages/Home/Home'))
 const About      = lazy(() => import('./pages/About/About'))
@@ -61,18 +63,21 @@ function AppRoutes() {
       <ScrollToTop />
       <Navbar />
       <QABot />
-      <AnimatePresence mode="wait" initial={false}>
-        <Suspense fallback={<PageLoader />}>
-          <Routes location={location} key={location.pathname}>
-            <Route path="/"            element={<PageTransition><Home /></PageTransition>} />
-            <Route path="/about"       element={<PageTransition><About /></PageTransition>} />
-            <Route path="/amenities"   element={<PageTransition><Amenities /></PageTransition>} />
-            <Route path="/floor-plans" element={<PageTransition><FloorPlans /></PageTransition>} />
-            <Route path="/gallery"     element={<PageTransition><Gallery /></PageTransition>} />
-            <Route path="/contact"     element={<PageTransition><Contact /></PageTransition>} />
-          </Routes>
-        </Suspense>
-      </AnimatePresence>
+      <ErrorBoundary>
+        <AnimatePresence mode="wait" initial={false}>
+          <Suspense fallback={<PageLoader />}>
+            <Routes location={location} key={location.pathname}>
+              <Route path="/"            element={<PageTransition><Home /></PageTransition>} />
+              <Route path="/about"       element={<PageTransition><About /></PageTransition>} />
+              <Route path="/amenities"   element={<PageTransition><Amenities /></PageTransition>} />
+              <Route path="/floor-plans" element={<PageTransition><FloorPlans /></PageTransition>} />
+              <Route path="/gallery"     element={<PageTransition><Gallery /></PageTransition>} />
+              <Route path="/contact"     element={<PageTransition><Contact /></PageTransition>} />
+              <Route path="*"            element={<PageTransition><NotFound /></PageTransition>} />
+            </Routes>
+          </Suspense>
+        </AnimatePresence>
+      </ErrorBoundary>
       <Footer />
     </>
   )
