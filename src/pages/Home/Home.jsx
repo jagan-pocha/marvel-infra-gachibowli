@@ -174,20 +174,20 @@ export default function Home() {
             />
             <div style={{
               position: 'absolute', inset: 0,
-              background: 'linear-gradient(to bottom, rgba(2,8,20,0.55) 0%, rgba(2,8,20,0.35) 45%, rgba(2,8,20,0.75) 100%)',
+              background: 'linear-gradient(to bottom, rgba(2,8,20,0.18) 0%, rgba(2,8,20,0.08) 40%, rgba(2,8,20,0.60) 100%)',
             }} />
           </div>
         )}
 
-        {/* ── Animated orb background (desktop always, mobile as subtle overlay) ── */}
-        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: isMobile.current ? 1 : 0 }}>
+        {/* ── Animated orb background (desktop only) ── */}
+        {!isMobile.current && <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
 
           {/* Orb 1 — sky blue, top-left */}
           <div style={{
             position: 'absolute', top: '-10%', left: '-8%',
             width: '650px', height: '650px', borderRadius: '50%',
             background: 'radial-gradient(circle, #00b7fb 0%, transparent 70%)',
-            opacity: isMobile.current ? 0.12 : 0.28, filter: 'blur(72px)',
+            opacity: 0.28, filter: 'blur(72px)',
             animation: 'orb1 12s ease-in-out infinite',
           }} />
 
@@ -196,7 +196,7 @@ export default function Home() {
             position: 'absolute', top: '5%', right: '-10%',
             width: '580px', height: '580px', borderRadius: '50%',
             background: 'radial-gradient(circle, #1ded54 0%, transparent 70%)',
-            opacity: isMobile.current ? 0.10 : 0.22, filter: 'blur(80px)',
+            opacity: 0.22, filter: 'blur(80px)',
             animation: 'orb2 15s ease-in-out infinite',
           }} />
 
@@ -205,7 +205,7 @@ export default function Home() {
             position: 'absolute', top: '35%', left: '35%',
             width: '500px', height: '500px', borderRadius: '50%',
             background: 'radial-gradient(circle, #00d4cc 0%, transparent 70%)',
-            opacity: isMobile.current ? 0.06 : 0.14, filter: 'blur(90px)',
+            opacity: 0.14, filter: 'blur(90px)',
             animation: 'orb3 18s ease-in-out infinite',
           }} />
 
@@ -214,7 +214,7 @@ export default function Home() {
             position: 'absolute', bottom: '-5%', left: '20%',
             width: '480px', height: '480px', borderRadius: '50%',
             background: 'radial-gradient(circle, #0066ff 0%, transparent 70%)',
-            opacity: isMobile.current ? 0.08 : 0.18, filter: 'blur(80px)',
+            opacity: 0.18, filter: 'blur(80px)',
             animation: 'orb4 20s ease-in-out infinite',
           }} />
 
@@ -236,7 +236,7 @@ export default function Home() {
             position: 'absolute', bottom: 0, left: 0, right: 0, height: '180px',
             background: 'linear-gradient(to bottom, transparent, #020814)',
           }} />
-        </div>
+        </div>}
 
         {/* YouTube player — 0:45 → 2:00 loop (desktop only) */}
         {!isMobile.current && (
